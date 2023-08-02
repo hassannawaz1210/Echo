@@ -3,14 +3,10 @@
 // If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "imgui.h"
-#include "Backends/imgui_impl_sdl2.h"
-#include "Backends/imgui_impl_opengl3.h"
-#include "../Dependencies/ImGui/imgui_internal.h"
+#include "gui.h"
 #include <stdio.h>
 #include <SDL.h>
 #include <iostream>
-#include <vector>
 #include <string>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -135,12 +131,12 @@ int main(int, char**)
     //IM_ASSERT(font != nullptr);
 
     // Our state
+    ChatWindow chatWindow;
+    PeopleWindow peopleWindow;
     bool show_demo_window = true;
     bool show_another_window = false;
-    char message[256] = "";
     std::vector<char*> chatMessages;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
     int windowPosX = 0 , windowPosY = 0;
 
 
@@ -188,69 +184,17 @@ int main(int, char**)
             ImGui::ShowDemoWindow(&show_demo_window);
 
         //CHAT WINDOW
-        {
-            ImGui::SetNextWindowSize(ImVec2(1000 - (2 * PADDING), WINDOW_HEIGHT - (2*PADDING) ));
-            ImGui::SetNextWindowPos(ImVec2(windowPosX + PADDING, windowPosY + PADDING));
-            ImGui::Begin("Chat", NULL, window_flags);
-
-            //TEXTS REGION
-            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(71, 71, 71, 0.1));
-            ImGui::BeginChild("textsRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), false, ImGuiWindowFlags_HorizontalScrollbar);
-            //  ImGui::SetNextWindowSize(ImVec2(1000.0f, 720.0f), ImGuiCond_Once);
-            //   ImGui::SetWindowSize(ImVec2(1000.0f, 720.0f), 0);
-            ImGui::Indent(5.0f);
-            for (int i = 0; i < chatMessages.size(); i++)
-            {
-                ImGui::TextWrapped(chatMessages[i]);
-            }
-            ImGui::Unindent(5.0f);
-
-            ImGui::EndChild();
-            ImGui::PopStyleColor(1);
-
-            //INPUT TEXT REGION
-
-            ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.945);
-            if (ImGui::InputTextWithHint("##chat_box", "enter text here", message, 256, ImGuiInputTextFlags_EnterReturnsTrue, NULL))
-            {
-                char* tempMessage = new char[256];
-                strcpy_s(tempMessage, 256, message);
-                chatMessages.push_back(tempMessage);
-                memset(message, '\0', sizeof(message));
-                ImGui::SetKeyboardFocusHere(-1);
-            }
-            ImGui::PopItemWidth();
-
-            ImGui::SameLine();
-
-            //SEND BUTTON
-            if (ImGui::Button("Send")) // Check if the Send button is pressed
-            {
-                char* tempMessage = new char[256]; // Create a temporary buffer to store the message
-                strcpy_s(tempMessage, 256, message); // Copy the message to the temporary buffer
-                chatMessages.push_back(tempMessage); // Add the message to the chatMessages vector
-                memset(message, '\0', sizeof(message));
-                ImGui::SetKeyboardFocusHere(ImGui::GetID("##chat_box"));
-            }
-
-
-            ImGui::End();
-        }
+        chatWindow.SetSize(1000 - (2 * PADDING), WINDOW_HEIGHT - (2 * PADDING));
+        chatWindow.SetPos(windowPosX + PADDING, windowPosY + PADDING);
+        chatWindow.Display(chatMessages);
            
 
 
         //PEOPLE WINDOW
-
-        {
-            ImGui::SetNextWindowSize(ImVec2(280 - PADDING, WINDOW_HEIGHT - 2*PADDING));
-            ImGui::SetNextWindowPos(ImVec2(1000 + windowPosX , windowPosY + PADDING));
-            int online = 0;
-            ImGui::Begin("People", NULL, window_flags);
-            ImGui::Text("Online: %d", online);
-            ImGui::BeginChild("peopleRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), false, ImGuiWindowFlags_HorizontalScrollbar);
-            ImGui::EndChild();
-            ImGui::End();
-        }
+        peopleWindow.SetSize((280 - PADDING), (WINDOW_HEIGHT - 2*PADDING));
+        peopleWindow.SetPos((1000 + windowPosX ), (windowPosY + PADDING));
+        peopleWindow.Display();
+        
 
         // 3. Show another simple window.
         if (show_another_window)
