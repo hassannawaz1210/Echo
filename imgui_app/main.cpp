@@ -6,8 +6,7 @@
 #include "gui.h"
 #include <stdio.h>
 #include <SDL.h>
-#include <iostream>
-#include <string>
+#include "clientnetwork.hpp"
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
 #else
@@ -122,22 +121,28 @@ int main(int, char**)
     // - Read 'docs/FONTS.md' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
     // - Our Emscripten build process allows embedding fonts to be accessible at runtime from the "fonts/" folder. See Makefile.emscripten for details.
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+    io.Fonts->AddFontDefault();
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != nullptr);
 
-    // Our state
+    // Global variables
+    int windowPosX = 0 , windowPosY = 0;
+
     ChatWindow chatWindow;
     PeopleWindow peopleWindow;
+    ConnectionWindow connWindow;
+    User user;
+    ClientNetwork clientNetwork;
+    
+    std::vector<char*> chatMessages;
+    std::thread reception_thread(&ClientNetwork::ReceivePackets, &clientNetwork, &clientNetwork.socket, &chatMessages);
+    
     bool show_demo_window = true;
     bool show_another_window = false;
-    std::vector<char*> chatMessages;
+
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    int windowPosX = 0 , windowPosY = 0;
 
 
     // Main loop
@@ -170,30 +175,31 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
-        
+
         SDL_GetWindowPosition(window, &windowPosX, &windowPosY);
-
-        //Window flags for each window
-        ImGuiWindowFlags window_flags = 0;
-        window_flags |= ImGuiWindowFlags_NoMove;
-        window_flags |= ImGuiWindowFlags_NoResize;
-        window_flags |= ImGuiWindowFlags_NoCollapse;
-
 
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 
+
         //CHAT WINDOW
         chatWindow.SetSize(1000 - (2 * PADDING), WINDOW_HEIGHT - (2 * PADDING));
-        chatWindow.SetPos(windowPosX + PADDING, windowPosY + PADDING);
-        chatWindow.Display(chatMessages);
+        chatWindow.SetPos(float(windowPosX) + PADDING, float(windowPosY) + PADDING);
+        chatWindow.Display(chatMessages, clientNetwork, user);
            
-
-
         //PEOPLE WINDOW
-        peopleWindow.SetSize((280 - PADDING), (WINDOW_HEIGHT - 2*PADDING));
-        peopleWindow.SetPos((1000 + windowPosX ), (windowPosY + PADDING));
+        peopleWindow.SetSize((280 - PADDING), (WINDOW_HEIGHT - 2 * PADDING));
+        peopleWindow.SetPos((1000 + float(windowPosX) ), (float(windowPosY) + PADDING));
         peopleWindow.Display();
+
+        //CONNECTION WINDOW
+
+        if (!clientNetwork.isConnected)
+        {
+            connWindow.SetPos(float(windowPosX) + (WINDOW_WIDTH / 2) - (CONNECTION_WINDOW_WIDTH / 2), float(windowPosY) + (WINDOW_HEIGHT / 2) - (CONNECTION_WINDOW_HEIGHT / 2));
+            connWindow.SetSize(CONNECTION_WINDOW_WIDTH, CONNECTION_WINDOW_HEIGHT);
+            connWindow.Display(clientNetwork, user);
+        }
         
 
         // 3. Show another simple window.
@@ -239,6 +245,11 @@ int main(int, char**)
     SDL_GL_DeleteContext(gl_context);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    exit(0);
+
+
+    //cant join because the thread runs forever
+    reception_thread.~thread();
 
     return 0;
 }

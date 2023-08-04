@@ -54,6 +54,12 @@
     <ClCompile Include="gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="clientnetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Dependencies\ImGui\imconfig.h">
@@ -84,6 +90,9 @@
       <Filter>Header Files\backends</Filter>
     </ClInclude>
     <ClInclude Include="gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="clientnetwork.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -104,13 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\sdl2\include;$(SolutionDir)Dependencies\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\sdl2\include;$(SolutionDir)Dependencies\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\sdl2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\SFML\lib;$(SolutionDir)Dependencies\sdl2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;sfml-system-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -121,15 +121,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\sdl2\include;$(SolutionDir)Dependencies\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\sdl2\include;Dependencies\SFML\include;$(SolutionDir)Dependencies\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\sdl2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\SFML\lib;$(SolutionDir)Dependencies\sdl2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;sfml-system-s.lib;sfml-network-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -140,6 +140,8 @@
     <ClCompile Include="..\Dependencies\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Backends\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="client.cpp" />
+    <ClCompile Include="clientnetwork.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -153,6 +155,7 @@
     <ClInclude Include="Backends\imgui_impl_opengl3.h" />
     <ClInclude Include="Backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="Backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="clientnetwork.hpp" />
     <ClInclude Include="gui.h" />
   </ItemGroup>
   <ItemGroup>
