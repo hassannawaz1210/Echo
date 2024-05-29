@@ -31,6 +31,10 @@ cmake ..
 ### 5. ***Open the Project in Visual Studio***:
 Once the project files are generated, you will find them inside the 'build' folder.
 
+### *** Important Note***:
+Dont change the directory structure.
+### ***Note***:
+You have to build both projects(Server and Chat) separately.
 ### ***Note***:
 Project is only running in Debug configuration only (for now)  
 ### ***Note***: 
