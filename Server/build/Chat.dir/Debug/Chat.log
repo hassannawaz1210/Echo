@@ -1,0 +1,5 @@
+﻿  Building Custom Rule D:/cmake/Chat/Server/CMakeLists.txt
+  server.cpp
+  servernetwork.cpp
+  Generating Code...
+  Chat.vcxproj -> D:\cmake\Chat\Server\build\Debug\Chat.exe

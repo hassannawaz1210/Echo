@@ -1,0 +1,3 @@
+D:/cmake/Chat/Server/build/CMakeFiles/Chat.dir
+D:/cmake/Chat/Server/build/CMakeFiles/ALL_BUILD.dir
+D:/cmake/Chat/Server/build/CMakeFiles/ZERO_CHECK.dir
