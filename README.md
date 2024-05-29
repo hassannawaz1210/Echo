@@ -30,7 +30,7 @@ cmake ..
 ```
 ### 5. ***Open the Project in Visual Studio***:
 Once the project files are generated, you will find them inside the 'build' folder.
-
+---
 ### *** Important Note***:
 Dont change the directory structure.
 ### ***Note***:
